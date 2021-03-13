@@ -17,8 +17,7 @@ class _HomePageState extends State<HomePage> {
           title: Text('Wallpaper App'),
         ),
         body: Visibility(
-          child: providerData.listViewBuilder(
-              'https://api.unsplash.com/search/photos?page=2&per_page=30&client_id=tZ53x_MgSn7Q0rh9HNWFkOC9nPLVqXL0T77iNilmD1U&query=car'),
+          child: providerData.listViewBuilder(1, 'car'),
         ),
       ),
     );

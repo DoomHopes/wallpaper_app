@@ -1,22 +1,64 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/image_model.dart';
+import 'package:wallpaper_app/providers/home_page_provider.dart';
 
-import 'circular_progress_loading_widget.dart';
+class GridViewBuilder extends StatefulWidget {
+  GridViewBuilder({Key key, @required this.listHome}) : super(key: key);
+  List<ImageModel> listHome;
 
-class ListViewBuilder extends StatelessWidget {
-  ListViewBuilder({Key key, @required this.listHome}) : super(key: key);
-  final List<ImageModel> listHome;
+  @override
+  _GridViewBuilderState createState() => _GridViewBuilderState();
+}
+
+class _GridViewBuilderState extends State<GridViewBuilder> {
+  int page = 2;
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
+    super.initState();
+  }
+
+  _loadData(int page, String query) {
+    context.read<HomePageProvider>().getReturnedListFromAPI(page, query);
+    setState(() {
+      page += 1;
+    });
+  }
+
+  _scrollListener() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      _loadData(page, 'car');
+      setState(() {
+        page += 1;
+      });
+      _defaultLoading();
+    }
+  }
+
+  Widget _defaultLoading() {
+    return Container(
+      padding: EdgeInsets.all(15),
+      alignment: Alignment.center,
+      child: CircularProgressIndicator(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      controller: _controller,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount:
             MediaQuery.of(context).orientation == Orientation.landscape ? 3 : 2,
         childAspectRatio: 1.5,
       ),
-      itemCount: listHome.length,
+      itemCount: widget.listHome.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
@@ -24,7 +66,7 @@ class ListViewBuilder extends StatelessWidget {
           },
           child: Container(
             child: Image.network(
-              listHome[index].urls.regular,
+              widget.listHome[index].urls.regular,
               fit: BoxFit.fitWidth,
               loadingBuilder: (BuildContext context, Widget child,
                   ImageChunkEvent loadingProgress) {

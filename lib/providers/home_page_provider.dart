@@ -4,26 +4,34 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallpaper_app/models/image_model.dart';
 import 'package:wallpaper_app/widgets/circular_progress_loading_widget.dart';
-import 'package:wallpaper_app/widgets/list_view_widget.dart';
+import 'package:wallpaper_app/widgets/grid_view_widget.dart';
 
 class HomePageProvider extends ChangeNotifier {
   List<ImageModel> workList = [];
 
-  Widget listViewBuilder(String url) {
+  Widget listViewBuilder(int page, String query) {
     if (workList.isEmpty) {
-      getReturnedListFromAPI(url);
+      getReturnedListFromAPI(page, query);
       return const CircularProgressLoading();
     } else {
-      return ListViewBuilder(listHome: workList);
+      return GridViewBuilder(
+        listHome: workList,
+      );
     }
   }
 
-  Future<void> getReturnedListFromAPI(String url) async {
-    workList = await getData(url);
+  Future<void> getReturnedListFromAPI(int page, String query) async {
+    List<ImageModel> temp = await getData(page, query);
+    workList.addAll(temp);
     notifyListeners();
   }
 
-  Future<List<ImageModel>> getData(String url) async {
+  String getUrl(int page, String query) {
+    return 'https://api.unsplash.com/search/photos?page=$page&per_page=30&client_id=tZ53x_MgSn7Q0rh9HNWFkOC9nPLVqXL0T77iNilmD1U&query=$query';
+  }
+
+  Future<List<ImageModel>> getData(int page, String query) async {
+    String url = getUrl(page, query);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -36,9 +44,9 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   List<ImageModel> addToList(List<dynamic> addList) {
-    List<ImageModel> newNewsList = [];
-    newNewsList =
+    List<ImageModel> newImageList = [];
+    newImageList =
         addList.map<ImageModel>((json) => ImageModel.fromJson(json)).toList();
-    return newNewsList;
+    return newImageList;
   }
 }
