@@ -21,6 +21,11 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
+  Widget searchListViewBuilder(int page, String query) {
+    getListFromAPI(page, query);
+    return GridViewBuilder(listHome: workList);
+  }
+
   Future<void> getListFromAPI(int page, String query) async {
     workList = await getData(page, query);
     this.query = query;

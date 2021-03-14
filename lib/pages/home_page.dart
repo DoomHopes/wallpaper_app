@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
 import 'package:wallpaper_app/widgets/drawer_widget.dart';
+import 'package:wallpaper_app/widgets/search_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,6 +17,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (context, providerData, child) => Scaffold(
         appBar: AppBar(
           title: Text('Wallpaper App'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: Search());
+              },
+            )
+          ],
         ),
         drawer: MyDrawerWidget(),
         body: Visibility(
