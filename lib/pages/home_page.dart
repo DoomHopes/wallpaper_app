@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
+import 'package:wallpaper_app/widgets/drawer_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomePageProvider>(
@@ -16,6 +17,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text('Wallpaper App'),
         ),
+        drawer: MyDrawerWidget(),
         body: Visibility(
           child: providerData.listViewBuilder(1, 'car'),
         ),

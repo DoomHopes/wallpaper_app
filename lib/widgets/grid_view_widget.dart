@@ -6,7 +6,7 @@ import 'package:wallpaper_app/providers/home_page_provider.dart';
 
 class GridViewBuilder extends StatefulWidget {
   GridViewBuilder({Key key, @required this.listHome}) : super(key: key);
-  List<ImageModel> listHome;
+  final List<ImageModel> listHome;
 
   @override
   _GridViewBuilderState createState() => _GridViewBuilderState();
@@ -24,7 +24,7 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
   }
 
   _loadData(int page, String query) {
-    context.read<HomePageProvider>().getReturnedListFromAPI(page, query);
+    context.read<HomePageProvider>().getGridViewListFromAPI(page, query);
     setState(() {
       page += 1;
     });
@@ -33,20 +33,11 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
   _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      _loadData(page, 'car');
+      _loadData(page, context.read<HomePageProvider>().query);
       setState(() {
         page += 1;
       });
-      _defaultLoading();
     }
-  }
-
-  Widget _defaultLoading() {
-    return Container(
-      padding: EdgeInsets.all(15),
-      alignment: Alignment.center,
-      child: CircularProgressIndicator(),
-    );
   }
 
   @override

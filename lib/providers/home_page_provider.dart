@@ -8,10 +8,11 @@ import 'package:wallpaper_app/widgets/grid_view_widget.dart';
 
 class HomePageProvider extends ChangeNotifier {
   List<ImageModel> workList = [];
+  String query;
 
   Widget listViewBuilder(int page, String query) {
     if (workList.isEmpty) {
-      getReturnedListFromAPI(page, query);
+      getListFromAPI(page, query);
       return const CircularProgressLoading();
     } else {
       return GridViewBuilder(
@@ -20,9 +21,16 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getReturnedListFromAPI(int page, String query) async {
+  Future<void> getListFromAPI(int page, String query) async {
+    workList = await getData(page, query);
+    this.query = query;
+    notifyListeners();
+  }
+
+  Future<void> getGridViewListFromAPI(int page, String query) async {
     List<ImageModel> temp = await getData(page, query);
     workList.addAll(temp);
+    this.query = query;
     notifyListeners();
   }
 

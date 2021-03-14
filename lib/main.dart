@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<HomePageProvider>(
           create: (_) => HomePageProvider(),
-        )
+        ),
       ],
       child: MaterialApp(
         locale: Locale('ru'),
