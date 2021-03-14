@@ -23,11 +23,14 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   _loadData(int page, String query) {
     context.read<HomePageProvider>().getGridViewListFromAPI(page, query);
-    setState(() {
-      page += 1;
-    });
   }
 
   _scrollListener() {
@@ -56,23 +59,26 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
             //to do something
           },
           child: Container(
-            child: Image.network(
-              widget.listHome[index].urls.regular,
-              fit: BoxFit.fitWidth,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes
-                        : null,
-                  ),
-                );
-              },
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Image.network(
+                widget.listHome[index].urls.regular,
+                fit: BoxFit.fitWidth,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes
+                          : null,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );
