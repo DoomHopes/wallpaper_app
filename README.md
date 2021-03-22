@@ -2,5 +2,5 @@
 
 My wallpaper app
 
-![](screenshots/photo_1.jpg)
+![](screenshots/photo_1.jpg =100x20)
 
