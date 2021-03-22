@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/pages/home_page.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
+import 'dart:ui' as ui;
 
 void main() {
   runApp(MyApp());
+}
+
+Locale checkLocale() {
+  String locale =
+      Locale(ui.window.locale.toString().replaceRange(2, 5, '')).toString();
+  if (locale == 'ru') {
+    return Locale('ru');
+  } else {
+    return Locale('en');
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        locale: Locale('ru'),
+        locale: checkLocale(),
         title: 'Wallpaper App',
         initialRoute: '/first',
         theme: ThemeData.dark(),

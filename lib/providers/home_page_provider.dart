@@ -9,6 +9,7 @@ import 'package:wallpaper_app/widgets/grid_view_widget.dart';
 class HomePageProvider extends ChangeNotifier {
   List<ImageModel> workList = [];
   String query;
+  int page;
 
   Widget listViewBuilder(int page, String query) {
     if (workList.isEmpty) {
@@ -25,15 +26,15 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   Future<void> getListFromAPI(int page, String query) async {
-    workList = await getData(page, query);
     this.query = query;
+    workList = await getData(page, query);
     notifyListeners();
   }
 
   Future<void> getGridViewListFromAPI(int page, String query) async {
+    this.query = query;
     List<ImageModel> temp = await getData(page, query);
     workList.addAll(temp);
-    this.query = query;
     notifyListeners();
   }
 
