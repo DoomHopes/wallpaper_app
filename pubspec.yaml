@@ -31,6 +31,10 @@ dependencies:
   provider: ^4.3.3
   http:
   data_connection_checker: ^0.3.4
+  wallpaperplugin: ^0.1.2
+  dio: ^3.0.9
+  path_provider:
+  permission_handler: ^4.2.0
 
 dev_dependencies:
   flutter_test:

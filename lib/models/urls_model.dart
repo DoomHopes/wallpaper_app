@@ -20,12 +20,4 @@ class Urls {
         small: json["small"],
         thumb: json["thumb"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "raw": raw,
-        "full": full,
-        "regular": regular,
-        "small": small,
-        "thumb": thumb,
-      };
 }

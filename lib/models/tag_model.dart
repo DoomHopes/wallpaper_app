@@ -11,9 +11,4 @@ class Tag {
         type: json["type"],
         title: json["title"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "title": title,
-      };
 }

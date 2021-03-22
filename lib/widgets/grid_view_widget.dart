@@ -1,7 +1,14 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
+import 'package:wallpaperplugin/wallpaperplugin.dart';
 
 class GridViewBuilder extends StatefulWidget {
   @override
@@ -11,6 +18,7 @@ class GridViewBuilder extends StatefulWidget {
 class _GridViewBuilderState extends State<GridViewBuilder> {
   int _page = 2;
   ScrollController _controller;
+  String _localfile;
 
   @override
   void initState() {
@@ -40,6 +48,59 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
     }
   }
 
+  static Future<bool> _checkAndGetPermission() async {
+    final PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.storage);
+    if (permission != PermissionStatus.granted) {
+      final Map<PermissionGroup, PermissionStatus> permissions =
+          await PermissionHandler()
+              .requestPermissions(<PermissionGroup>[PermissionGroup.storage]);
+      if (permissions[PermissionGroup.storage] != PermissionStatus.granted) {
+        return null;
+      }
+    }
+    return true;
+  }
+
+  _onTapImage(BuildContext context, values) {
+    return AlertDialog(
+      title: Text("Set as wallpaper ?"),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("NO"),
+        ),
+        FlatButton(
+          onPressed: () async {
+            if (await _checkAndGetPermission() != null) {
+              Dio dio = Dio();
+              final Directory appdirectory =
+                  await getExternalStorageDirectory();
+              final Directory directory =
+                  await Directory(appdirectory.path + '/wallpapers')
+                      .create(recursive: true);
+              final String dir = directory.path;
+              final String localfile = '$dir/myimage.jpeg';
+              try {
+                await dio.download(values, localfile);
+                setState(() {
+                  _localfile = localfile;
+                });
+                Wallpaperplugin.setAutoWallpaper(localFile: _localfile);
+              } on PlatformException catch (e) {
+                print(e);
+              }
+              Navigator.pop(context);
+            }
+          },
+          child: Text("YES"),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomePageProvider>(
@@ -63,7 +124,10 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                //to do something
+                showDialog(
+                    context: context,
+                    builder: (context) => _onTapImage(
+                        context, providerData.workList[index].urls.regular));
               },
               child: Container(
                 child: Image.network(

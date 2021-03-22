@@ -42,19 +42,4 @@ class User {
             ? null
             : json["instagram_username"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "updated_at": updatedAt.toIso8601String(),
-        "username": username,
-        "name": name,
-        "first_name": firstName,
-        "last_name": lastName == null ? null : lastName,
-        "twitter_username": twitterUsername == null ? null : twitterUsername,
-        "portfolio_url": portfolioUrl == null ? null : portfolioUrl,
-        "bio": bio == null ? null : bio,
-        "location": location == null ? null : location,
-        "instagram_username":
-            instagramUsername == null ? null : instagramUsername,
-      };
 }

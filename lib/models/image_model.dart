@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:wallpaper_app/models/tag_model.dart';
 import 'package:wallpaper_app/models/urls_model.dart';
 import 'package:wallpaper_app/models/user_model.dart';
+
+import 'links_model.dart';
 
 class ImageModel {
   ImageModel({
@@ -14,6 +18,7 @@ class ImageModel {
     this.blurHash,
     this.description,
     this.altDescription,
+    this.links,
     this.urls,
     this.user,
     this.tags,
@@ -31,6 +36,7 @@ class ImageModel {
   String altDescription;
   Urls urls;
   User user;
+  Links links;
   List<Tag> tags;
 
   factory ImageModel.fromJson(Map<String, dynamic> json) => ImageModel(
@@ -46,24 +52,9 @@ class ImageModel {
         blurHash: json["blur_hash"],
         description: json["description"] == null ? null : json["description"],
         altDescription: json["alt_description"],
+        links: Links.fromJson(json["links"]),
         urls: Urls.fromJson(json["urls"]),
         user: User.fromJson(json["user"]),
         tags: List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-        "promoted_at": promotedAt == null ? null : promotedAt.toIso8601String(),
-        "width": width,
-        "height": height,
-        "color": color,
-        "blur_hash": blurHash,
-        "description": description == null ? null : description,
-        "alt_description": altDescription,
-        "urls": urls.toJson(),
-        "user": user.toJson(),
-        "tags": List<dynamic>.from(tags.map((x) => x.toJson())),
-      };
 }
