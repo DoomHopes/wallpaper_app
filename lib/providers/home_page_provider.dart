@@ -15,15 +15,13 @@ class HomePageProvider extends ChangeNotifier {
       getListFromAPI(page, query);
       return const CircularProgressLoading();
     } else {
-      return GridViewBuilder(
-        listHome: workList,
-      );
+      return GridViewBuilder();
     }
   }
 
   Widget searchListViewBuilder(int page, String query) {
     getListFromAPI(page, query);
-    return GridViewBuilder(listHome: workList);
+    return GridViewBuilder();
   }
 
   Future<void> getListFromAPI(int page, String query) async {

@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallpaper_app/models/image_model.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
 
 class GridViewBuilder extends StatefulWidget {
-  GridViewBuilder({Key key, @required this.listHome}) : super(key: key);
-  final List<ImageModel> listHome;
+  GridViewBuilder({Key key}) : super(key: key);
 
   @override
   _GridViewBuilderState createState() => _GridViewBuilderState();
@@ -45,44 +43,48 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      controller: _controller,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount:
-            MediaQuery.of(context).orientation == Orientation.landscape ? 3 : 2,
-        childAspectRatio: 1.5,
-      ),
-      itemCount: widget.listHome.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            //to do something
-          },
-          child: Container(
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image.network(
-                widget.listHome[index].urls.regular,
-                fit: BoxFit.fitWidth,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes
-                          : null,
-                    ),
-                  );
-                },
+    return Consumer<HomePageProvider>(
+      builder: (context, providerData, child) => GridView.builder(
+        controller: _controller,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              MediaQuery.of(context).orientation == Orientation.landscape
+                  ? 3
+                  : 2,
+          childAspectRatio: 1.5,
+        ),
+        itemCount: providerData.workList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              //to do something
+            },
+            child: Container(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.network(
+                  providerData.workList[index].urls.regular,
+                  fit: BoxFit.fitWidth,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes
+                            : null,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
