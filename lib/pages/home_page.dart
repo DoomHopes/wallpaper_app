@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
+import 'package:wallpaper_app/utils/connection_checker.dart';
 import 'package:wallpaper_app/widgets/drawer_widget.dart';
 import 'package:wallpaper_app/widgets/search_widget.dart';
 
@@ -11,6 +14,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    ConnectionChecker().checkConnection(context);
+  }
+
+  @override
+  void dispose() {
+    ConnectionChecker().listener.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomePageProvider>(

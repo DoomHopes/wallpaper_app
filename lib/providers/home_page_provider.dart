@@ -9,7 +9,7 @@ import 'package:wallpaper_app/widgets/grid_view_widget.dart';
 class HomePageProvider extends ChangeNotifier {
   List<ImageModel> workList = [];
   String query;
-  int page;
+  bool connection;
 
   Widget listViewBuilder(int page, String query) {
     if (workList.isEmpty) {
