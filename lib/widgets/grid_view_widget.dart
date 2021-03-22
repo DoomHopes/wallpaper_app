@@ -127,7 +127,7 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                 showDialog(
                     context: context,
                     builder: (context) => _onTapImage(
-                        context, providerData.workList[index].urls.regular));
+                        context, providerData.workList[index].urls.full));
               },
               child: Container(
                 child: Image.network(

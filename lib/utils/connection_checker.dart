@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ConnectionChecker {
+  // ignore: cancel_subscriptions
   StreamSubscription<DataConnectionStatus> listener;
   var internetStatus = "Unknown";
   var contentmessage = "Unknown";
