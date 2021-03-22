@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/home_page_provider.dart';
 import 'package:wallpaper_app/widgets/drawer_widget.dart';
-import 'package:wallpaper_app/widgets/grid_view_widget.dart';
 import 'package:wallpaper_app/widgets/search_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,7 +27,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
         ),
         drawer: MyDrawerWidget(),
-        body: GridViewBuilder(),
+        body: Visibility(
+          child: providerData.listViewBuilder(1, 'car'),
+        ),
       ),
     );
   }
