@@ -88,7 +88,7 @@ class _GridViewBuilderState extends State<GridViewBuilder> {
                 setState(() {
                   _localfile = localfile;
                 });
-                Wallpaperplugin.setAutoWallpaper(localFile: _localfile);
+                Wallpaperplugin.setWallpaperWithCrop(localFile: _localfile);
               } on PlatformException catch (e) {
                 print(e);
               }
