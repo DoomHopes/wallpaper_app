@@ -43,15 +43,19 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   Future<List<ImageModel>> getData(int page, String query) async {
-    String url = getUrl(page, query);
-    final response = await http.get(url);
+    try {
+      String url = getUrl(page, query);
+      final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final dynamic jsonData = json.decode(response.body);
-      final List<dynamic> listMap = jsonData['results'];
-      return addToList(listMap);
-    } else {
-      throw Exception('Failed to load data');
+      if (response.statusCode == 200) {
+        final dynamic jsonData = json.decode(response.body);
+        final List<dynamic> listMap = jsonData['results'];
+        return addToList(listMap);
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      throw Future.error(e);
     }
   }
 
